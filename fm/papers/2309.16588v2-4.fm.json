@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "2cb5032e-a123-4363-9553-7091e0b0ccb3",
+      "question": "부록 A에서 관찰한 outlier 위치 분포의 수직 줄무늬 패턴의 원인은?",
+      "answer": "원래 DINOv2 구현이 학습 중 position embedding을 16x16 맵에서 7x7 맵으로 antialiasing 없이 보간했기 때문이다. bicubic resize를 통해 단위 gradient를 전파하면 같은 줄무늬 패턴이 나타난다."
+    },
+    {
+      "id": "b5c8bb9c-7411-47a9-819c-5eb19316b2a0",
+      "question": "저자들은 보간 artifact를 어떻게 해결했는가?",
+      "answer": "DINOv2 결과를 낼 때(특히 Table 2a, 3) 항상 보간 연산자에 antialiasing을 적용했다. 그 결과 줄무늬 패턴이 사라진 outlier 위치 분포를 얻었다."
+    },
+    {
+      "id": "2d61c93e-69b7-4c45-8914-8cd1b045ed05",
+      "question": "outlier가 feature map의 중앙보다 경계 쪽에 많이 나타나는 이유에 대한 해석은?",
+      "answer": "사람이 찍은 사진은 대체로 object-centric이라 경계 영역이 배경인 경우가 많고, 정보량이 적기 때문이다. 모델은 이런 저정보 영역의 토큰을 register로 재활용하는 경향이 있다."
+    },
+    {
+      "id": "20948ea2-6003-476a-b0ed-b4654428a1de",
+      "question": "register 추가에 따른 계산 비용 증가는 어느 정도인가?",
+      "answer": "파라미터 수 증가는 무시할 만한 수준이고 FLOP은 약간 증가한다. register 16개면 FLOP이 최대 6% 늘지만, 주로 쓰는 4개에서는 2% 미만이다."
+    },
+    {
+      "id": "9f459fd7-bbf6-4af8-a077-b13d992026b4",
+      "question": "OpenCLIP에서 LOST 성능이 register로 개선되지 않은 이유에 대한 분석은?",
+      "answer": "LOST 실험에서 OpenCLIP은 feature가 아니라 attention 계산의 value를 쓰는데, value projection이 register 없이도 outlier를 걸러내기 때문이다. 즉 outlier가 value projection layer의 null space에 존재하는 것으로 보인다."
+    },
+    {
+      "id": "0a90325c-8827-4d16-8e06-28f7e44ec98c",
+      "question": "OpenCLIP의 key·query·value별 LOST seed expansion 관찰 결과는?",
+      "answer": "register 없는 모델에서 key와 query에는 배경에 점 형태의 artifact가 뚜렷이 보인다. 반면 value로 계산한 seed expansion map은 register 유무와 무관하게 artifact가 나타나지 않는다."
+    },
+    {
+      "id": "84dd47e0-ce92-40ee-991a-068e07ae03bc",
+      "question": "register 도입 후 high-norm 토큰은 어디로 갔는가?",
+      "answer": "patch token에는 더 이상 outlier가 없고, high-norm 토큰이 전적으로 register 집합 안에 담긴다. 즉 high-norm outlier를 만드는 동작이 register에 흡수된다."
+    },
+    {
+      "id": "99d9efc1-fe34-45b8-89db-5a033d806f64",
+      "question": "register 토큰의 norm에 대해 관찰된 흥미로운 현상은?",
+      "answer": "이전의 outlier와 비교해 register의 norm이 양자화(quantized)된 것처럼 보인다는 점이다. 이 현상의 규명은 향후 과제로 남겼다."
+    },
+    {
+      "id": "a5e59c9b-3c46-4d0a-949f-1e5d3d3d8822",
+      "question": "Table 4(Aircraft 데이터셋 linear probing)에서 관찰된 바는?",
+      "answer": "register를 추가해도 [CLS]나 patch token으로 얻는 점수는 크게 달라지지 않는다. 다만 outlier patch가 사라지고 그 동작(global 정보 집약)이 새로 추가된 register로 이전된다."
+    },
+    {
+      "id": "faafb49b-f81b-41c6-b27e-8c43daf43d39",
+      "question": "Table 5에서 register 유무에 따른 non-outlier patch의 local 정보는 어떻게 비교되는가?",
+      "answer": "register 0개일 때 non-outlier의 position prediction top-1은 66.3, reconstruction L2 error는 15.9이고, register 4개일 때는 65.8과 16.0이다. 즉 register는 outlier 동작만 제거할 뿐 다른 patch의 정보를 크게 바꾸지 않는다."
+    },
+    {
+      "id": "40114196-5dec-4ee6-9990-6dedb0e9d482",
+      "question": "register와 [CLS] 토큰의 평균 attention map은 어떻게 만들어졌고 무엇을 보여주는가?",
+      "answer": "ImageNet-22k의 무작위 부분집합에 모델을 돌려 마지막 layer의 attention map을 평균 내 만들었다. ImageNet-22k가 주로 object-centric 이미지라 평균 map이 중앙 blob 형태로 나타난다."
+    },
+    {
+      "id": "b1a0900f-fa39-4573-a15b-3856fbd29812",
+      "question": "register들 사이의 positional focus 차이의 예시는?",
+      "answer": "register 3은 경계 영역에 더 집중하고 다른 register들은 더 중앙에 집중한다. register 2는 이미지 위쪽에 약간 더 집중하는 등 어느 정도의 전문화(specialization)가 나타난다."
+    },
+    {
+      "id": "6cb14b64-da30-42c4-8ff1-d1e2d4e93437",
+      "question": "평균 attention map 비교로 register가 global 정보를 담는다고 결론 내린 근거는?",
+      "answer": "register는 [CLS] 토큰과 매우 유사하게 넓은 support 영역을 가진 map을 만들고, 국소적인 일반 patch token과는 확연히 다르다. [CLS]가 global 정보를 담는 것이 알려져 있으므로 register도 그렇다고 볼 수 있다."
+    },
+    {
+      "id": "817d585c-5f21-446a-8c0a-f4d84ec9d673",
+      "question": "Masked Autoencoder(MAE)에는 왜 artifact가 없다고 추정하는가?",
+      "answer": "MAE의 학습이 정보의 global aggregation을 요구하는 목적함수 대신 patch token에 대한 local loss만 사용하기 때문이라는 가설이다."
+    },
+    {
+      "id": "7594724e-c65c-4de6-b8a3-8a61892f1c70",
+      "question": "MAE가 그대로 쓰이기 어려운 이유는?",
+      "answer": "자기지도 표현학습 성능이 매우 낮기 때문이다. ViT-Large 기준 ImageNet linear probing 성능이 75%에 그쳐 fine-tuning이 필수적이다."
+    },
+    {
+      "id": "3a4d2b38-a824-46f6-b178-0f062f56a750",
+      "question": "artifact는 마지막 블록의 특정 attention head에만 나타나는가?",
+      "answer": "아니다. 모든 attention head에서 artifact가 나타난다. 다만 head마다 객체의 다른 영역에 집중하며, 일부 head가 다른 head보다 artifact에 더 집중하는 경향은 있다."
+    },
+    {
+      "id": "b550674d-76dc-4d52-8fa4-4895c649192e",
+      "question": "부록 G에서 Table 1 결과의 분산을 별도로 보고한 이유는?",
+      "answer": "Table 1은 normal 또는 outlier 중 patch token 하나를 무작위로 골라 평가하므로 토큰 선택 자체가 큰 분산의 원천이 되기 때문이다. Table 6에 그 표준편차를 함께 보고했다."
+    },
+    {
+      "id": "3d8b1d66-ccdc-44eb-97e3-a04821350f67",
+      "question": "논문의 최종 결론을 요약하면?",
+      "answer": "모델이 저정보 영역의 토큰을 재활용해 다른 역할로 쓰는 현상을 outlier norm으로 탐지하고, 출력에 쓰이지 않는 추가 토큰을 붙이는 단순한 수정으로 artifact를 완전히 제거했다. dense prediction과 object discovery 성능이 개선되며, DeiT-III·OpenCLIP 같은 지도학습 모델에도 동일하게 적용된다."
+    }
+  ]
+}

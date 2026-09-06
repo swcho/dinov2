@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "049bbc7e-4379-4127-993d-27dc1fa916a0",
+      "question": "논문 \"Vision Transformers Need Registers\"가 발견한 핵심 문제는 무엇인가?",
+      "answer": "지도학습·자기지도학습 ViT 모두의 feature map에 artifact가 존재한다는 것이다. 이 artifact는 이미지의 정보량이 적은 배경 영역에서 추론 중 나타나는 high-norm token으로, 모델이 내부 연산 용도로 재활용하는 토큰이다."
+    },
+    {
+      "id": "0bec16ea-714d-4aee-b00e-79c1842dbad7",
+      "question": "이 논문이 제안하는 해결책은 무엇인가?",
+      "answer": "Vision Transformer의 입력 시퀀스에 추가 토큰(register)을 넣어 그 내부 연산 역할을 대신 맡게 하는 것이다. 매우 단순하지만 지도·자기지도 모델 모두에서 artifact를 완전히 제거한다."
+    },
+    {
+      "id": "b3866cbc-7772-436d-9cae-8f4179860fc7",
+      "question": "register 토큰 도입이 가져오는 세 가지 주요 효과는?",
+      "answer": "(1) dense visual prediction 과제에서 자기지도 시각 모델의 새로운 SOTA 달성, (2) 더 큰 모델에서도 object discovery 방법이 동작하게 함, (3) 더 매끄러운 feature map과 attention map 생성."
+    },
+    {
+      "id": "4d80a41a-97c2-4328-b76a-7a8ae954c692",
+      "question": "generic feature embedding 연구가 오늘날에도 여전히 중요한 이유는?",
+      "answer": "많은 특정 과제에 대해 가치 있는 주석 데이터를 모으기 어렵기 때문이다. 의료·원격탐사처럼 전문성이 필요하거나, 대규모 수집 비용이 크기 때문이다."
+    },
+    {
+      "id": "9fbe4e35-e899-44d2-9dee-738bf6a92b2d",
+      "question": "DINO 알고리즘이 특별히 주목받은 이유는?",
+      "answer": "마지막 attention layer가 이미지의 의미적으로 일관된 부분에 자연스럽게 집중해 해석 가능한 attention map을 만들기 때문이다. 이 성질 덕분에 LOST 같은 비지도 object discovery 알고리즘이 DINO 위에 구축될 수 있었다."
+    },
+    {
+      "id": "0e948e6b-438c-4b5d-8b6a-eb2c2e8005fe",
+      "question": "저자들이 DINOv2에서 이상함을 처음 감지한 계기는?",
+      "answer": "DINOv2가 dense prediction에서는 강력한 성능을 내면서도 LOST와는 놀랍도록 호환되지 않았기 때문이다. DINOv2 feature로 object discovery를 하면 지도학습 백본과 비슷한 수준의 실망스러운 성능만 나왔다."
+    },
+    {
+      "id": "6937a7f3-afd5-4bea-9f4d-791da7f2b050",
+      "question": "artifact 관점에서 DINO와 DINOv2 중 어느 쪽이 '예외'인가?",
+      "answer": "DINO가 예외다. 지도학습 ViT에도 동일한 artifact가 나타나므로, DINOv2가 오히려 vision transformer의 기본(baseline) 동작에 부합하고 DINO가 특이 케이스다."
+    },
+    {
+      "id": "f5a45406-59d7-43e0-9fb9-147f1cd379e2",
+      "question": "outlier token의 norm과 비율은 대략 어느 정도인가?",
+      "answer": "출력에서 다른 토큰보다 대략 10배 높은 norm을 가지며, 전체 시퀀스의 약 2% 정도의 작은 비율을 차지한다."
+    },
+    {
+      "id": "092b468c-4aa7-483b-a053-729b303b1072",
+      "question": "Fig. 2에서 비교한 네 종류 ViT 중 artifact가 없는 모델은?",
+      "answer": "DINO만 예외적으로 attention map에 뾰족한 outlier 값이 없다. label supervision의 DeiT-III, text supervision의 OpenCLIP, self-supervision의 DINOv2는 모두 artifact를 보인다."
+    },
+    {
+      "id": "18750f43-d592-402d-b029-0a9f86703c96",
+      "question": "artifact patch를 정량적으로 구분하는 기준은 무엇인가?",
+      "answer": "모델 출력에서의 token embedding norm이다. feature norm 분포가 명확히 bimodal이어서, 이 논문에서는 norm 150을 넘는 토큰을 \"high-norm\" 토큰으로 정의했다."
+    },
+    {
+      "id": "785f7f0f-2d6c-4812-925b-469470220f82",
+      "question": "high-norm 판정 cutoff 값 150의 성격은?",
+      "answer": "분포의 bimodality를 보고 손으로 고른(hand-picked) 값이며, 모델마다 달라질 수 있다. 논문에서는 \"high-norm\"과 \"outlier\"를 서로 바꿔 쓸 수 있는 용어로 사용한다."
+    },
+    {
+      "id": "f1847352-c67c-4a53-9232-982d08e66778",
+      "question": "Fig. 3에서 DINOv2 ViT-g의 outlier 비율은 어떻게 측정되었나?",
+      "answer": "대부분의 patch token은 norm 0~100 사이지만 극소수가 매우 높은 norm을 가진다. norm 150 초과 토큰의 비율은 2.37%로 측정되었다."
+    },
+    {
+      "id": "3a1566d6-a478-4a83-868f-273fe3dead8a",
+      "question": "outlier token은 40-layer DINOv2 ViT-g의 어느 층에서 나타나기 시작하는가?",
+      "answer": "약 15번째 layer부터, 즉 모델의 중간쯤에서 다른 patch와 구별되기 시작한다."
+    },
+    {
+      "id": "61b41b73-a179-45b4-893d-1c284be8339a",
+      "question": "학습 과정에서 outlier token은 언제 등장하는가?",
+      "answer": "학습 전체의 약 1/3이 지난 뒤부터 나타난다. 즉 충분히 오래 학습해야만 발생하는 현상이다."
+    },
+    {
+      "id": "66faddd3-d784-496c-88ec-3d9fae66be6c",
+      "question": "모델 크기와 outlier 발생의 관계는?",
+      "answer": "Tiny, Small, Base, Large, Huge, giant 중 가장 큰 세 모델(ViT-Large 이상)에서만 outlier가 나타난다. 즉 충분히 큰 모델에서만 발생한다."
+    },
+    {
+      "id": "7090ca8b-3f02-4264-bd9d-c9a2e44a40ea",
+      "question": "high-norm token은 어떤 위치의 patch에서 나타나는가?",
+      "answer": "patch embedding 직후 기준으로 이웃 4개 patch와 코사인 유사도가 매우 높은, 즉 중복된 정보를 담은 patch에서 나타난다. 질적으로도 균일한 배경 영역에 자주 등장한다."
+    },
+    {
+      "id": "2259e9ab-966f-4d85-a6b1-a953e4e1daa1",
+      "question": "high-norm token이 담은 정보를 조사하기 위해 사용한 두 가지 probing 과제는?",
+      "answer": "position prediction(patch의 이미지 내 위치 예측)과 pixel reconstruction(patch embedding으로부터 픽셀 값 복원)이다. 두 과제 모두 patch embedding 위에 선형 모델을 학습시켜 성능을 측정한다."
+    },
+    {
+      "id": "edaaf7d5-46fa-4c9b-b510-fb9191bb0ad5",
+      "question": "position prediction probing 결과가 시사하는 바는?",
+      "answer": "high-norm token은 다른 토큰보다 위치 예측 정확도가 훨씬 낮다. 이는 절대 위치 임베딩으로 주입되었던 위치 정보를 이 토큰들이 덜 보유하고 있음을 뜻한다."
+    }
+  ]
+}

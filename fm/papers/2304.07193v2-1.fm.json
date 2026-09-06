@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "fca0cee8-3b93-4727-9f2f-4cedee49d8f2",
+      "question": "DINOv2 논문의 핵심 주장은 무엇인가?",
+      "answer": "충분히 큐레이션된 다양한 출처의 데이터로 학습하면 자기지도학습(SSL)만으로도 파인튜닝 없이 여러 태스크·이미지 분포에서 동작하는 범용 시각 특징을 얻을 수 있다는 것이다. 즉 컴퓨터 비전용 foundation model이 텍스트 지도 없이도 가능함을 보인다."
+    },
+    {
+      "id": "db18ed0a-a3d0-4f27-b918-eaf118570eb4",
+      "question": "DINOv2가 말하는 \"범용 시각 특징(general-purpose visual features)\"의 정의는?",
+      "answer": "파인튜닝 없이 여러 이미지 분포와 여러 태스크에서 그대로(as they are) 동작하는 특징을 말한다. 이미지 수준(분류)과 픽셀 수준(분할) 양쪽에서 바로 쓸 수 있어야 한다."
+    },
+    {
+      "id": "70576135-0a6a-4b7c-a1a5-ac8fd8e52a9a",
+      "question": "DINOv2는 어떤 규모의 모델을 학습했고 작은 모델은 어떻게 만들었나?",
+      "answer": "1B(10억) 파라미터의 ViT-g 모델을 학습한 뒤, 이를 여러 작은 모델로 distillation했다. 증류된 소형 모델들도 대부분의 벤치마크에서 OpenCLIP을 능가한다."
+    },
+    {
+      "id": "2f045140-1eea-45bd-9f89-89c2d9ea6e6a",
+      "question": "NLP의 사전학습 패러다임이 DINOv2에 준 시사점은?",
+      "answer": "language modeling이나 word vector 같이 지도 신호가 필요 없는 pretext objective로 대량의 raw text를 사전학습하면, 파인튜닝 없이도 태스크별 모델보다 좋은 성능을 낸다는 점이다. DINOv2는 이 흐름을 비전에 옮기려 한다."
+    },
+    {
+      "id": "2792516c-e5f0-4ccb-9d42-a7139ed679d2",
+      "question": "텍스트 지도 사전학습(text-guided pretraining)의 한계로 논문이 지적한 것은?",
+      "answer": "캡션은 이미지의 풍부한 정보를 근사할 뿐이라 보존 가능한 정보가 제한되고, 복잡한 픽셀 수준 정보는 이 지도로 드러나지 않는다. 또 정렬된 image-text 코퍼스를 요구해 raw data만으로 학습하는 유연성이 없다."
+    },
+    {
+      "id": "d71b7b59-b2ef-4625-89e0-0027fe314cdc",
+      "question": "기존 자기지도학습 연구가 대규모로 확장될 때 겪은 문제는?",
+      "answer": "대부분의 진전은 ImageNet-1k 같은 작은 큐레이션 데이터셋 위에서 이뤄졌고, 그 너머로 확장한 시도들은 uncurated 데이터를 써서 특징 품질이 크게 떨어졌다. 데이터 품질과 다양성을 통제하지 못한 것이 원인이다."
+    },
+    {
+      "id": "2d150a87-6286-4e06-87de-ec133da65820",
+      "question": "DINOv2의 학습 효율 개선 결과는 iBOT 대비 어느 정도인가?",
+      "answer": "동일 하드웨어에서 약 2배 빠르고 메모리는 약 1/3만 사용한다. 덕분에 더 큰 배치와 더 긴 학습이 가능해졌다."
+    },
+    {
+      "id": "9bec92cd-1a64-4a55-aaf0-eaa0441d7300",
+      "question": "DINOv2가 구축한 사전학습 데이터셋 이름과 규모는?",
+      "answer": "LVD-142M으로, 1억 4200만 장의 작지만 다양한 큐레이션 이미지 코퍼스다. 대규모 uncurated 이미지 풀에서 자동 파이프라인으로 필터링·리밸런싱해 만들었다."
+    },
+    {
+      "id": "2994e5c8-47d2-4c9d-abc2-fead0e450ed0",
+      "question": "LVD-142M 구축 파이프라인이 NLP에서 차용한 아이디어는?",
+      "answer": "Wenzek et al.(2020)의 텍스트 큐레이션 파이프라인에서 영감을 받아, 외부 메타데이터 대신 데이터 간 유사도를 사용한다. 수작업 annotation이 전혀 필요 없다."
+    },
+    {
+      "id": "8e007c64-dea5-4ca1-9766-99ab33c1f344",
+      "question": "이미지 데이터를 wild에서 다룰 때 가장 큰 난점과 DINOv2의 해법은?",
+      "answer": "개념을 리밸런싱해 소수의 지배적 모드에 과적합되지 않게 하는 것이 어렵다. 논문은 단순한 clustering 접근만으로도 이 문제가 충분히 잘 해결됨을 보였다."
+    },
+    {
+      "id": "6885e1f0-3051-43e0-822f-bf5b08566cf3",
+      "question": "Figure 1의 PCA 시각화가 보여주는 emergent property는?",
+      "answer": "같은 컬럼 이미지들의 패치 간 PCA 첫 3개 성분을 색 채널로 매핑하면, 포즈·스타일·객체가 달라도 같은 \"부위(part)\"끼리 매칭된다. 첫 성분 thresholding만으로 배경도 제거된다."
+    },
+    {
+      "id": "ec5638e8-ba1d-4714-9be2-63fbda45aaea",
+      "question": "Intra-image 자기지도학습 계열의 대표적 pretext task들은?",
+      "answer": "패치 문맥 예측(Doersch et al.), 재채색(re-colorizing), 변환 예측, inpainting, 패치 재정렬 등이 있다. ViT 등장 이후 inpainting 기반 사전학습(MAE, BEiT)이 다시 주목받았다."
+    },
+    {
+      "id": "e4f8c125-faba-4b39-a351-f15bb05e82c2",
+      "question": "MAE(Masked Auto-Encoder)와 DINOv2의 핵심 차이는?",
+      "answer": "MAE의 특징은 다운스트림에서 지도 파인튜닝을 해야 큰 개선을 얻는다. 반면 DINOv2의 특징은 frozen 상태로 바로(out of the box) 잘 작동한다."
+    },
+    {
+      "id": "bb925d14-114f-48e4-b8fb-b5234d8e4eb6",
+      "question": "Discriminative 자기지도학습 계열의 두 갈래는?",
+      "answer": "instance-level objective(MoCo, SimCLR, BYOL, DINO 등)와 clustering 기반(DeepCluster, SwAV 등)으로 나뉜다. 표준 벤치마크에서 좋은 frozen feature를 주지만 큰 모델로 확장하기 어려웠다."
+    },
+    {
+      "id": "4036fd1c-ba68-4b0f-a8c5-21c1d426308a",
+      "question": "DINOv2가 확장의 토대(baseline)로 삼은 방법은?",
+      "answer": "iBOT(Zhou et al., 2022a)이다. 이미지 수준과 패치 수준 특징을 동시에 학습하는 구조가 스케일링에 특히 적합하다고 판단했다."
+    },
+    {
+      "id": "5d158f88-f626-4302-b5e5-a1be3c898026",
+      "question": "자동 데이터 큐레이션에서 DINOv2가 기존 연구와 다른 점은?",
+      "answer": "사전학습된 인코더, 메타데이터(해시태그 등), 어떤 지도 신호도 쓰지 않고 오직 이미지 간 시각적 유사도만으로 필터링한다. LAION 등이 pretrained encoder로 필터링한 것과 대비된다."
+    },
+    {
+      "id": "00492ab2-8c7f-4bd9-aa52-cce8f2c2767a",
+      "question": "LVD-142M의 큐레이션 데이터 소스는 무엇으로 구성되나?",
+      "answer": "ImageNet-22k, ImageNet-1k의 train split, Google Landmarks, 그리고 여러 fine-grained 데이터셋으로 구성된다. 상세 목록은 Table 15에 있다."
+    },
+    {
+      "id": "2092a4dd-b6f8-4ebb-a5fe-7dc4d640325f",
+      "question": "uncurated 데이터 소스는 어떻게 수집·전처리했나?",
+      "answer": "공개된 웹 크롤 저장소의 각 페이지에서 `<img>` 태그의 URL을 추출하고, 안전하지 않거나 도메인 제한된 URL을 버렸다. 다운로드 후 PCA hash 중복제거, NSFW 필터링, 얼굴 블러링을 거쳐 12억 장의 고유 이미지를 얻었다."
+    },
+    {
+      "id": "9853d013-4e2a-4db6-aafa-adeab08586d9",
+      "question": "DINOv2 데이터 파이프라인의 3단계는?",
+      "answer": "① 큐레이션·비큐레이션 이미지를 임베딩으로 매핑, ② 비큐레이션 이미지 중복제거(deduplication), ③ 큐레이션 이미지와 매칭하는 self-supervised retrieval이다. 그 결과가 증강된 최종 데이터셋이 된다."
+    }
+  ]
+}

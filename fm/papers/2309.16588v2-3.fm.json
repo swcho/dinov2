@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "aa30b86e-ddc4-40c8-95d0-a60dd1b12369",
+      "question": "Table 2a에서 OpenCLIP과 OpenCLIP+reg의 결과는?",
+      "answer": "ImageNet Top-1 78.2 → 78.1, ADE20k mIoU 26.6 → 26.7, NYUd rmse 0.702 → 0.661로 depth에서 뚜렷한 개선이 있다. OpenCLIP 재현 성능의 절대값이 낮은 것은 사용한 데이터 소스 때문이다."
+    },
+    {
+      "id": "1ced2928-64a4-4abd-95b6-5822a0f45881",
+      "question": "OpenCLIP의 zero-shot ImageNet 분류 성능은 register 도입으로 어떻게 되었나?",
+      "answer": "59.9에서 60.1로, 사실상 변하지 않았다. register가 text-image 정렬 능력을 해치지 않음을 보여준다."
+    },
+    {
+      "id": "6191f4b0-bb17-4f9b-a8fb-b2887148c9b5",
+      "question": "register 개수 ablation은 어떤 설정으로 진행되었나?",
+      "answer": "DINOv2 ViT-L/14 모델을 register 0, 1, 2, 4, 8, 16개로 각각 학습했다. attention map의 정성적 변화와 ImageNet·ADE-20k·NYUd 성능을 함께 평가했다."
+    },
+    {
+      "id": "2a683390-0026-4a78-99d1-9f87a7cd8523",
+      "question": "artifact 제거에 필요한 최소 register 개수는?",
+      "answer": "1개만 추가해도 눈에 보이는 artifact가 사라진다. 다만 downstream 성능 향상을 위해서는 더 많이 쓰는 것이 유리할 수 있다."
+    },
+    {
+      "id": "aa4b5993-a84d-413b-a9b6-357e488233a5",
+      "question": "register 개수에 따른 dense task와 ImageNet 성능 경향의 차이는?",
+      "answer": "dense task에는 최적 개수가 존재하며 하나만 추가해도 대부분의 이득을 얻는다. 반면 ImageNet 분류 성능은 register가 많을수록 향상된다."
+    },
+    {
+      "id": "558c3ca8-2096-4c1e-be7d-df72f9f36c11",
+      "question": "논문의 모든 실험에서 최종적으로 사용한 register 개수는?",
+      "answer": "4개다. artifact 제거와 downstream 성능 사이의 균형점으로 선택되었다."
+    },
+    {
+      "id": "51963716-33b3-41b8-aee0-b9bb19fecbdf",
+      "question": "object discovery 실험은 어떤 알고리즘과 데이터셋으로 수행했는가?",
+      "answer": "LOST(Siméoni et al., 2021)를 사용해 PASCAL VOC 2007, VOC 2012, COCO 20k에서 평가했다. 성능 지표는 corloc이다."
+    },
+    {
+      "id": "db080431-c6f1-4d00-994a-9c91ecd2843e",
+      "question": "LOST 실험에서 모델별로 어떤 feature를 사용했는가?",
+      "answer": "DeiT와 OpenCLIP은 value를, DINOv2는 key를 사용했다. 출력 feature의 conditioning이 다를 수 있어 feature의 gram matrix에 bias를 수동으로 더했다."
+    },
+    {
+      "id": "41c97fd3-9e89-49d4-ae50-74cf3735e549",
+      "question": "Table 3에서 DINOv2의 object discovery corloc은 register로 얼마나 개선되었나?",
+      "answer": "VOC 2007은 35.3 → 55.4, VOC 2012는 40.2 → 60.0, COCO 20k는 26.9 → 42.0으로 크게 향상되었다. VOC2007 기준 20.1 corloc 개선이다."
+    },
+    {
+      "id": "e61b94b1-c7af-4901-9f67-38ec8c1012d2",
+      "question": "Table 3에서 DeiT-III의 object discovery 성능 변화는?",
+      "answer": "VOC 2007 11.7 → 27.1, VOC 2012 13.1 → 32.7, COCO 20k 10.7 → 25.1로 두 배 이상 향상되었다. 원래 거의 쓸 수 없는 수준이었던 백본이 사용 가능해진다."
+    },
+    {
+      "id": "7f4c6ef1-02d1-4a8b-839a-e389b6f4dbb6",
+      "question": "OpenCLIP은 object discovery에서 register 도입 후 어떻게 되었나?",
+      "answer": "오히려 약간 나빠졌다(VOC2007 38.8 → 37.1, VOC2012 44.3 → 42.0, COCO 31.0 → 27.9). 이에 대한 분석은 부록 C에 있다."
+    },
+    {
+      "id": "d419dc1f-ad40-4786-a779-a4fdbeeae7b9",
+      "question": "register를 넣은 DINOv2도 아직 넘지 못한 기준선은?",
+      "answer": "VOC2007에서 DINO가 보고한 61.9 corloc이다. DINOv2+reg는 55.4로 개선폭은 크지만 아직 DINO에는 미치지 못한다."
+    },
+    {
+      "id": "b0db7bba-b17e-4c9d-9d57-b2b64c8e458a",
+      "question": "여러 register 토큰의 attention 패턴은 서로 같은가?",
+      "answer": "완전히 같지 않다. 일부 register는 장면 속 서로 다른 객체에 주목하는 흥미로운 패턴을 보이며, 이는 slot attention과 유사하다."
+    },
+    {
+      "id": "5b31a8a1-4b7b-449b-8666-0684d22826f3",
+      "question": "register의 attention 다양성에 대해 저자들이 강조한 점은?",
+      "answer": "이런 분화 행동은 어떤 방식으로도 강제되지 않았고 학습 과정에서 자연스럽게 창발했다는 것이다. register의 정규화(regularization) 연구는 향후 과제로 남겼다."
+    },
+    {
+      "id": "d708935c-1b4f-43d8-9597-1b80bd673daa",
+      "question": "transformer에 특수 토큰을 추가하는 기존 방식들의 목적은 무엇이었나?",
+      "answer": "새 정보를 제공(BERT의 [SEP]), 연산량을 늘림(AdaTape의 tape token), 또는 정보를 모아 그 출력값을 모델 출력으로 사용([CLS], [MASK], DETR의 object query, YOLOS detection token, Perceiver의 latent array)하는 것이었다."
+    },
+    {
+      "id": "21306f9f-39f0-48f7-8687-e2383538712e",
+      "question": "이 논문의 register가 기존 추가 토큰들과 다른 점은?",
+      "answer": "register는 어떤 정보도 추가하지 않으며 출력값도 전혀 사용되지 않는다. 순전히 모델이 forward pass 중 정보를 저장·검색할 수 있는 레지스터일 뿐이다."
+    },
+    {
+      "id": "16bdb229-4671-476f-ae59-c8368b8290e6",
+      "question": "Sandler et al.(2022)의 learnable memory 연구와 이 논문의 차이는?",
+      "answer": "그들은 vision 도메인에서 fine-tuning에 memory token을 적용했고 과제 간 전이가 잘 안 됨을 관찰했다. 이 논문은 fine-tuning 없이 사전학습 단계에서 추가 토큰을 써서 모든 downstream 과제의 feature를 개선한다."
+    },
+    {
+      "id": "ee0b64bd-1010-4c96-9ca9-21bcd977b847",
+      "question": "memory token 관련 선행 연구 대비 이 논문이 기여한 새로운 통찰은?",
+      "answer": "memory token이 구현하는 메커니즘이 Vision Transformer에서 이미 자연적으로 발생하고 있다는 점이다. 즉 register는 이 동작을 '만드는' 것이 아니라 '분리(isolate)'해 부작용을 피하게 해준다."
+    }
+  ]
+}

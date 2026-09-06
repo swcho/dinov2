@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "eca653f1-0511-41a7-8c86-87a02ccb4efe",
+      "question": "중복제거(deduplication)에 사용한 방법과 목적은?",
+      "answer": "Pizzi et al.(2022)의 copy detection 파이프라인으로 near-duplicate를 제거한다. 중복을 줄여 다양성을 높이고, 벤치마크의 test/val 셋과 유사한 이미지도 제거해 평가 오염을 막는다."
+    },
+    {
+      "id": "fb477eaf-59d6-4e71-bbc1-baaeba1309b0",
+      "question": "self-supervised image retrieval에 쓰인 임베딩 모델과 거리 척도는?",
+      "answer": "ImageNet-22k로 사전학습된 self-supervised ViT-H/16 네트워크로 이미지 임베딩을 계산한다. 이미지 간 거리는 코사인 유사도로 측정한다."
+    },
+    {
+      "id": "3fc35a0a-165f-4567-800c-199bd4040120",
+      "question": "쿼리 데이터셋 크기에 따른 retrieval 전략 차이는?",
+      "answer": "쿼리 데이터셋이 충분히 크면 각 쿼리 이미지마다 N개(보통 4개)의 최근접 이웃을 검색한다. 작으면 각 쿼리 이미지에 대응하는 클러스터에서 M개를 샘플링한다."
+    },
+    {
+      "id": "003a463d-edfe-4c67-83dc-799c786e64cc",
+      "question": "retrieval에서 N=4를 선택한 이유는?",
+      "answer": "N을 훨씬 크게 해도 검색 품질은 시각적으로 좋아 보였지만, collision(여러 쿼리의 최근접 이웃으로 중복 검색되는 이미지)이 늘어난다. N=4가 그 사이의 좋은 절충점이다."
+    },
+    {
+      "id": "d0ee1255-3866-4dfb-8bdd-8c989cd8e892",
+      "question": "데이터 파이프라인의 구현 스택과 소요 시간은?",
+      "answer": "Faiss 라이브러리로 인덱싱·배치 검색을 수행하며, product quantization 코드를 쓰는 GPU 가속 inverted file index를 적극 활용한다. V100-32GB 8장짜리 노드 20개로 이틀 이내에 LVD-142M을 만든다."
+    },
+    {
+      "id": "b413ac81-2d2f-4675-b442-a98468910d7f",
+      "question": "DINOv2의 학습 목적함수는 어떤 방법들의 조합인가?",
+      "answer": "DINO loss와 iBOT loss의 조합에 SwAV의 centering을 더한 것이다. 여기에 특징을 퍼뜨리는 regularizer(KoLeo)와 짧은 고해상도 학습 단계를 추가했다."
+    },
+    {
+      "id": "10bf9f4b-5c35-4dc9-a71a-f6a28629b67e",
+      "question": "DINO(image-level) objective는 어떻게 계산되는가?",
+      "answer": "같은 이미지의 서로 다른 crop에서 얻은 student·teacher의 class token을 각자의 DINO head(MLP)에 통과시켜 prototype score를 얻는다. student는 softmax로 $p_s$, teacher는 softmax 후 centering으로 $p_t$를 얻고 손실은 $\\mathcal{L}_{DINO} = -\\sum p_t \\log p_s$이다."
+    },
+    {
+      "id": "daf002b3-d58a-4603-ba0a-15f3771fe8c4",
+      "question": "DINO/iBOT에서 teacher 네트워크는 어떻게 만들어지나?",
+      "answer": "student 파라미터를 학습하고, teacher head는 과거 iterate들의 exponential moving average(EMA)로 구성한다. teacher는 student와 같은 상태로 초기화되며 매 학습 스텝 끝에 업데이트된다."
+    },
+    {
+      "id": "2e859e5e-bead-4d00-aec3-f5a30a256540",
+      "question": "iBOT(patch-level) objective의 동작 방식은?",
+      "answer": "student에만 입력 패치 일부를 무작위 마스킹하고, student mask token은 student iBOT head에, 대응하는 (보이는) teacher patch token은 teacher iBOT head에 통과시킨다. 손실은 마스킹된 패치 인덱스 $i$에 대해 $\\mathcal{L}_{iBOT} = -\\sum_i p_{ti} \\log p_{si}$이다."
+    },
+    {
+      "id": "4307e535-5098-492b-afa6-b13a98d97981",
+      "question": "DINO head와 iBOT head의 파라미터 공유에 대해 DINOv2가 발견한 것은?",
+      "answer": "iBOT 원 논문의 ablation은 두 head의 파라미터 공유가 더 좋다고 했지만, 대규모(at scale)에서는 반대였다. 그래서 DINOv2는 모든 실험에서 head를 분리(untying)해 사용한다."
+    },
+    {
+      "id": "6350aef6-c9ab-4dec-b292-4bd8a70350bc",
+      "question": "Sinkhorn-Knopp centering이란 무엇이며 몇 번 반복하나?",
+      "answer": "teacher의 softmax-centering 단계를 SwAV의 Sinkhorn-Knopp batch normalization으로 대체하는 것이다. SK 알고리즘을 3번 반복하며, student 쪽은 그대로 softmax 정규화를 쓴다."
+    },
+    {
+      "id": "9f3fda47-119f-4c55-b5e5-e57bb53b7701",
+      "question": "KoLeo regularizer의 정의와 목적은?",
+      "answer": "Kozachenko-Leonenko 미분 엔트로피 추정에서 유도된 항으로 배치 내 특징이 고르게 퍼지도록 유도한다. $\\mathcal{L}_{koleo} = -\\frac{1}{n}\\sum_{i=1}^{n}\\log(d_{n,i})$이며 $d_{n,i}$는 $x_i$와 배치 내 다른 점 사이의 최소 거리다."
+    },
+    {
+      "id": "561fc7a7-0ef5-4bce-9fb1-5dc0fc479ac6",
+      "question": "KoLeo 계산 전에 특징에 적용하는 전처리는?",
+      "answer": "특징을 $\\ell_2$ 정규화한 뒤 regularizer를 계산한다. 이렇게 해야 최소 거리 기반 항이 스케일에 흔들리지 않는다."
+    },
+    {
+      "id": "b14e27c4-02ff-4cc1-9e92-2891a7fac22e",
+      "question": "KoLeo regularizer는 실제 학습에서 어떤 설정으로 적용되나?",
+      "answer": "가중치 0.1로, 첫 번째 global crop의 class token들 사이에 적용한다. GPU 간 통신 없이 각 GPU 내부의 샘플들에 대해서만 계산한다."
+    },
+    {
+      "id": "5b363353-ea5f-4314-b396-1a70a7966498",
+      "question": "DINOv2의 고해상도 적응(resolution adaptation) 전략은?",
+      "answer": "분할·검출 같은 픽셀 수준 태스크에는 고해상도가 중요하지만 처음부터 고해상도로 학습하면 시간·메모리 비용이 크다. 그래서 사전학습 막바지에 짧게 $518\\times518$ 해상도로 올려 학습한다."
+    },
+    {
+      "id": "4688e4dd-b399-4595-88ca-80617fe81a40",
+      "question": "DINOv2의 학습 하드웨어와 코드 공개 라이선스는?",
+      "answer": "A100 GPU에서 PyTorch 2.0으로 학습했다. 코드와 사전학습 모델은 Apache 2.0 라이선스로 공개되어 있다."
+    },
+    {
+      "id": "5568334d-60ee-4f02-8550-a9748f6078fc",
+      "question": "DINOv2가 직접 구현한 FlashAttention의 특징은?",
+      "answer": "self-attention 층의 메모리 사용량과 속도를 개선한 자체 버전으로, 모든 케이스에서 원본과 동등하거나 더 나으면서 더 많은 use-case와 하드웨어를 커버한다. GPU 특성상 head당 embedding 차원이 64의 배수일 때 효율이 가장 좋다."
+    },
+    {
+      "id": "1c054714-e48d-4e10-a9d5-70f307442882",
+      "question": "ViT-g 아키텍처가 원논문(Zhai et al., 2022)과 다른 점과 이유는?",
+      "answer": "1408 dim/16 heads(88 dim/head) 대신 1536 dim/24 heads(64 dim/head)를 쓴다. head당 차원을 64의 배수, 전체 차원을 256의 배수로 맞춰 행렬 연산 효율을 극대화하기 위함이며, 최종 정확도 차이는 유의미하지 않았다."
+    },
+    {
+      "id": "9e37252f-df2a-432f-9bf0-d8374e3dc4d1",
+      "question": "DINOv2 ViT-g 백본의 파라미터 수는?",
+      "answer": "약 11억(1.1B) 개다. embedding dim 1536, 24 heads, 40 blocks, SwiGLU FFN 구성이다."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "a5785d57-92a6-42bf-aed5-d2b62c643aca",
+      "question": "sequence packing이란 무엇이고 왜 필요한가?",
+      "answer": "DINO는 해상도 224의 large crop과 98의 small crop을 함께 forward해야 하는데 토큰 길이가 달라 한 번에 처리할 수 없다. 그래서 NLP에서 온 기법으로 시퀀스들을 하나의 긴 시퀀스로 concat해 함께 forward한다."
+    },
+    {
+      "id": "752e5776-a44b-4bd1-b9ab-0ceb2c7b805c",
+      "question": "sequence packing에서 서로 다른 시퀀스가 섞이지 않게 하는 방법은?",
+      "answer": "self-attention 행렬에 block-diagonal mask를 적용해 서로 다른 시퀀스 간 attention을 차단한다. 결과적으로 각 시퀀스를 따로 forward한 것과 수학적으로 완전히 동일하다."
+    },
+    {
+      "id": "d694c5a4-b299-4966-88d7-261312b9fdaf",
+      "question": "sequence packing의 저수준 구현은 어디서 제공되나?",
+      "answer": "Meta의 xFormers 라이브러리에 포함되어 있다. 별도 forward/backward pass를 쓰던 기존 구현 대비 큰 연산 효율 이득을 준다."
+    },
+    {
+      "id": "cad9bfaf-afe6-4563-83f3-b33012c9200b",
+      "question": "efficient stochastic depth가 기존 구현과 다른 점은?",
+      "answer": "드롭된 residual의 결과를 마스킹하는 대신 계산 자체를 건너뛴다. 전용 fused kernel 덕분에 drop rate에 거의 비례해 메모리와 연산을 절약한다."
+    },
+    {
+      "id": "37d99f60-8fd4-487a-9dba-a82774be4a9f",
+      "question": "efficient stochastic depth의 구체적 구현 방식과 사용 drop rate는?",
+      "answer": "배치 차원에서 B개 샘플을 무작위로 섞은 뒤 앞쪽 $(1-d)\\times B$개만 슬라이스해 블록 연산에 사용한다. 이 논문에서는 $d=40\\%$의 높은 drop rate를 쓴다."
+    },
+    {
+      "id": "3e19b6d4-53bc-41c0-9c5b-bee5496a4078",
+      "question": "AdamW로 ViT-g를 학습할 때 float32 복제본이 몇 개 필요하며 메모리는 얼마인가?",
+      "answer": "student, teacher, optimizer 1차 모멘트, 2차 모멘트로 총 4개의 float32 복제본이 필요하다. 10억 파라미터 모델 기준 약 16GB에 달한다."
+    },
+    {
+      "id": "7bc990fd-52c6-4ccb-a759-1ce00001146b",
+      "question": "FSDP를 쓰면 모델 크기 한계가 어떻게 바뀌나?",
+      "answer": "모델 복제본을 GPU들에 sharding하므로 모델 크기가 단일 GPU 메모리가 아니라 전체 컴퓨트 노드의 GPU 메모리 총합에 의해 제한된다. 16GB를 여러 GPU에 나눠 담는 방식이다."
+    },
+    {
+      "id": "c7133732-daa2-418a-9979-03f040324cd1",
+      "question": "PyTorch FSDP가 통신 비용 측면에서 주는 두 번째 이점은?",
+      "answer": "weight shard는 optimizer 요구대로 float32로 저장하되, 백본의 weight broadcast와 gradient reduce는 float16으로 수행한다. DDP의 float32 all-reduce 대비 통신 비용이 약 50% 줄어든다."
+    },
+    {
+      "id": "1a9abafc-d8ce-497a-b158-03ca16b0ad67",
+      "question": "FSDP에서 MLP head의 gradient는 왜 float32로 reduce하나?",
+      "answer": "학습 불안정을 피하기 위해서다. 백본은 float16으로 reduce하지만 DINO/iBOT head의 gradient만 float32를 유지한다."
+    },
+    {
+      "id": "080690a3-39a1-40b9-a5b0-abd0bc1ad465",
+      "question": "DINOv2가 소형 모델을 만드는 방식과 그 이유는?",
+      "answer": "처음부터 학습하는 대신 가장 큰 ViT-g에서 knowledge distillation한다. ablation 결과 ViT-L조차 scratch 학습보다 증류가 더 좋은 성능을 냈다."
+    },
+    {
+      "id": "6795c824-2b12-47c2-9fd8-b2c501c41f01",
+      "question": "DINOv2의 distillation이 일반 사전학습 루프와 다른 4가지 점은?",
+      "answer": "① 더 큰 모델을 frozen teacher로 사용, ② student의 EMA를 별도로 유지해 최종 모델로 사용, ③ masking과 stochastic depth 제거, ④ iBOT loss를 두 global crop에 적용한다."
+    },
+    {
+      "id": "cb61cddb-2baa-4807-b2f5-125b3833c930",
+      "question": "DINOv2의 distillation은 Duval et al.(2023)과 어떻게 다른가?",
+      "answer": "거의 유사하지만 DINOv2는 distillation을 위해 loss 항을 수정하지 않는다. 또 student 자체가 아니라 student의 EMA를 평가한다."
+    },
+    {
+      "id": "279f364f-c6b8-4d72-8dd4-e812f650b9d9",
+      "question": "Table 1의 iBOT→DINOv2 점진적 ablation에서 최종 k-NN과 linear 성능은?",
+      "answer": "iBOT 기준 k-NN 72.9 / linear 82.3에서 시작해 최종 DINOv2 설정에서 k-NN 82.0 / linear 84.5에 도달한다. ViT-Large를 ImageNet-22k에서 학습한 실험이다."
+    },
+    {
+      "id": "cb38f256-4396-44d2-ad6d-95faed053f30",
+      "question": "Table 1 ablation에서 k-NN 성능을 가장 크게 끌어올린 요소는?",
+      "answer": "KoLeo 추가가 +2.3으로 가장 큰 단일 상승폭을 보였다(76.6 → 78.9). 그 외 batch size 3k(+1.2), warmup schedule 조정(+1.1), 128k prototypes(+1.2)도 크게 기여했다."
+    },
+    {
+      "id": "7096328a-5fc4-4a4b-9e69-9542a0ea4502",
+      "question": "LayerScale과 높은 Stochastic Depth를 쓰는데도 유지하는 이유는?",
+      "answer": "linear probe 성능은 -1.2 떨어지지만 학습 중 NaN loss를 피해 학습 안정성을 크게 높인다. 이 안정성이 이후 개선들을 추가할 수 있는 토대가 되었다."
+    },
+    {
+      "id": "a9c7be7b-544c-4958-8be5-cf3dc8d8cbd4",
+      "question": "DINOv2 ablation에서 k-NN 성능을 최적화 기준으로 삼은 이유는?",
+      "answer": "경험상 linear probe 성능이 k-NN 성능에 의해 하한이 정해지기 때문이다. 즉 k-NN이 좋아지면 linear도 대체로 따라온다."
+    },
+    {
+      "id": "2b06d362-d607-43c0-bbf4-d39567d4db36",
+      "question": "사전학습 데이터 출처 ablation(Table 2)의 핵심 결론은?",
+      "answer": "큐레이션된 이미지로 학습하는 것이 uncurated 데이터보다 대부분의 벤치마크에서 낫다. 자기지도 사전학습에서도 데이터 큐레이션의 이점이 확인된다."
+    },
+    {
+      "id": "39b6735f-5c2b-4307-afeb-53c1aa4cf5e8",
+      "question": "LVD-142M과 ImageNet-22k 학습을 비교하면?",
+      "answer": "LVD-142M은 ImageNet-1k를 제외한 모든 벤치마크에서 ImageNet-22k보다 우수하다. 예를 들어 Oxford-M 64.6 vs 62.5, iNat2018 82.3 vs 81.1이다."
+    },
+    {
+      "id": "a387b586-b097-4fda-a9c5-4284b040374c",
+      "question": "LVD-142M이 큐레이션에 쓰이지 않은 도메인에서도 좋은 이유는?",
+      "answer": "iNaturalist 2018/2021, Places205처럼 큐레이션 과정에 사용되지 않은 도메인에서도 성능이 올랐다. 이는 스케일과 다양성 자체가 미지 도메인에 이롭다는 증거다."
+    }
+  ]
+}

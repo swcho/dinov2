@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "c7897604-89d0-48f5-ae65-b8b81087b5a3",
+      "question": "patch feature PCA 분석 절차는?",
+      "answer": "패치 특징의 첫 성분을 thresholding해 양수 패치만 남기면 주 객체와 배경이 분리된다. 남은 패치들에 대해 같은 카테고리 이미지 3장에 걸쳐 두 번째 PCA를 수행하고 첫 3개 성분을 색 채널로 표시한다."
+    },
+    {
+      "id": "b7781445-7de5-4fbe-9766-02fc2d069c2d",
+      "question": "PCA 분석에서 관찰된 두 가지 emergent property는?",
+      "answer": "① 최대 분산 방향 탐지에 기반한 비지도 전경/배경 검출기가 주 객체 경계를 잘 구분한다. ② 나머지 성분들이 객체의 \"부위(part)\"에 대응하며 같은 카테고리 이미지끼리 잘 매칭된다 — 부위 파싱은 학습하지 않은 창발적 성질이다."
+    },
+    {
+      "id": "fccc6c88-fe94-42fb-859d-8141214f3f22",
+      "question": "patch matching 실험은 어떻게 수행되나?",
+      "answer": "먼저 PCA 기반 절차로 전경 객체를 검출한 뒤, 두 이미지의 패치 특징 간 유클리드 거리를 계산하고 assignment problem을 풀어 매핑한다. 이후 non-maximum suppression으로 두드러진 매칭만 남긴다."
+    },
+    {
+      "id": "a524264d-05bb-4b71-bf5c-61e4d5d997d9",
+      "question": "patch matching 결과가 보여주는 특징의 성질은?",
+      "answer": "서로 다른 객체·동물이라도 유사한 목적을 가진 semantic region끼리 매칭된다(예: 비행기의 날개 ↔ 새의 날개). 스타일(사진 vs 그림) 변화와 큰 포즈 변화에도 강건하다."
+    },
+    {
+      "id": "b4f9836f-f518-4950-aaca-986c6050ddae",
+      "question": "DINOv2가 수행한 두 가지 공정성(fairness) 평가는?",
+      "answer": "지리적 공정성(geographical fairness)과 유해한 레이블 연관(harmful label association) 평가다. 두 평가 모두 가장 큰 ViT-g 모델로 진행했다."
+    },
+    {
+      "id": "bd2831c7-9529-40c2-a0a8-67fb6d14b4d0",
+      "question": "지리적 공정성 평가에 사용한 데이터셋의 구성은?",
+      "answer": "Dollar Street 데이터셋으로, 54개국 289가구에서 온 16,073장의 이미지를 담고 있다. 소득·위치에 따라 시각적으로 달라지는 94개 개념을 인식하는 태스크다."
+    },
+    {
+      "id": "3b162f4b-9661-4150-8216-8a4fa0c51d34",
+      "question": "지리적 공정성 평가에서 DINOv2와 SEERv2를 비교하면?",
+      "answer": "DINOv2 ViT-g/14가 모든 소득 구간·지역에서 SEERv2를 앞선다(예: Africa 74.0 vs 65.9, low income 67.4 vs 59.7). SEERv2가 지리적으로 다양한 이미지로 학습된 모델임에도 그렇다."
+    },
+    {
+      "id": "2b624636-eb55-4dfd-9eb6-0109c83c6e92",
+      "question": "지리적 공정성 평가에서 드러난 DINOv2의 편향은?",
+      "answer": "Europe 대비 Africa에서 성능이 25.7% 낮아 서구권 편향이 남아 있다. 고소득 가구 대비 저소득 가구 성능 차이도 31.7%로 크다."
+    },
+    {
+      "id": "bc70a59d-6d5c-4872-b856-98c40a8afeea",
+      "question": "레이블 연관 공정성 평가의 프로토콜은?",
+      "answer": "ImageNet-22k의 619개 클래스 부분집합으로 다중 클래스 분류기를 학습하고, 이를 Human / Possibly Human / Non-Human / Crime 네 범주로 묶는다. Casual Conversations의 2955장에 대해 top-5 중 확률 0.1 이상인 레이블을 모두 취한다."
+    },
+    {
+      "id": "e4249fc9-4869-4a18-b562-6d1462d8a6ef",
+      "question": "레이블 연관 평가에서 DINOv2가 원 프로토콜에 가한 수정은?",
+      "answer": "백본으로 gradient를 역전파하지 않고 frozen 상태를 유지한 채 linear classifier만 학습한다. Goyal et al.(2022b)의 원 프로토콜은 백본을 파인튜닝한다."
+    },
+    {
+      "id": "db43e270-fd57-4663-9325-0f9b56a8110b",
+      "question": "레이블 연관 평가 결과는 어땠나?",
+      "answer": "SEERv2도 DINOv2도 Non-Human이나 Crime 같은 유해 메타범주를 사실상 예측하지 않았다(배경의 창살이 감옥 창살처럼 보인 2건 제외). 특정 집단에 대한 뚜렷한 편향 패턴도 나타나지 않았다."
+    },
+    {
+      "id": "a02ca8f4-928e-4484-b04b-a6a53914c14e",
+      "question": "DINOv2가 남성 이미지에 Possibly-Human을 자주 예측하는 이유는?",
+      "answer": "Possibly-Human 범주가 Scarf, Glasses, Beard처럼 사람과 자주 연관되는 ImageNet-22k 객체들로 구성되어 있는데, Beard 클래스의 빈도가 높기 때문이다. 논문은 더 철저한 편향 평가가 결함을 드러낼 수 있음도 인정한다."
+    },
+    {
+      "id": "39d8963d-8593-4b5a-8640-80e91e586509",
+      "question": "탄소 배출 추정에서 DINOv2가 택한 방법론은?",
+      "answer": "실제 데이터센터 사양 대신, 미국 평균 데이터센터에서 동일 모델을 재학습할 때의 잠재 배출량을 보고한다. PUE 1.1, 탄소집약도 0.385 kg CO2eq/KWh로 외생 변수를 고정해 사전학습 방식 간 공정 비교를 가능하게 한다."
+    },
+    {
+      "id": "a203b623-e288-476c-9dcd-fa80a191eca7",
+      "question": "DINOv2-g 한 번의 사전학습에 드는 자원과 탄소 배출량은?",
+      "answer": "A100-40GB 기준 22,016 GPU-hours, 총 9.7 MWh를 소비하며 3.7 tCO2eq를 배출한다. GPU 전력은 NVLink 시스템의 TDP인 400W로 가정했다."
+    },
+    {
+      "id": "57f0e9ac-9628-4997-8e03-c8a90ae5553f",
+      "question": "DINOv2와 OpenCLIP의 재학습 에너지 비교는?",
+      "answer": "같은 데이터센터 기준 OpenCLIP ViT-L은 22.4 MWh, ViT-G는 118.9 MWh가 필요해 DINOv2-g(9.7 MWh) 대비 최대 10배 이상의 탄소를 배출한다. 다만 OpenCLIP은 텍스트 인코더도 동시에 학습하므로 완전히 공정한 비교는 아니다."
+    },
+    {
+      "id": "3596af5c-ff83-4b3e-823c-b9045ef188b3",
+      "question": "시각 특징만 필요할 때 논문이 제시하는 탄소 관점의 가이드라인은?",
+      "answer": "시각 특징만 학습할 목적이라면 자기지도 모델 학습이 탄소 배출 면에서 유리하다. 텍스트 인코더를 재사용할 계획이 있을 때에만 text-guided 모델 학습이 합리적이다."
+    },
+    {
+      "id": "60fd6d90-1ddd-45a1-8684-b0b1b3c6a450",
+      "question": "DINOv2 프로젝트 전체의 탄소 발자국 추정치는?",
+      "answer": "약 0.5k~1k tCO2eq, 약 20만 GPU-days 규모로 추정된다. 주 배출원은 자기지도 사전학습이며, ViT-g 사전학습 1회가 3.7톤, ImageNet-1k 파인튜닝(1k GPU-hours)이 0.2톤이다."
+    },
+    {
+      "id": "024cf6a8-88bc-46df-8984-c275ca4bf24a",
+      "question": "탄소 추정치에서 제외된 항목은?",
+      "answer": "GPU의 전력 소비만 고려하며, GPU 제조와 폐기 등 다른 배출은 무시한다. 따라서 실제 총 배출은 더 클 수 있다."
+    }
+  ]
+}

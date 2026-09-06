@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "ac266170-916a-47da-b34e-4c334ca9c81b",
+      "question": "DINOv2의 강력한 성능을 논문이 귀인한 네 가지 요인은?",
+      "answer": "① 더 나은 하이퍼파라미터·정규화를 갖춘 개선된 학습 레시피(Table 1), ② 데이터와 무관하게 이득을 주는 더 큰 모델 스케일(Fig. 4), ③ 더 큰 데이터셋(Fig. 4), ④ 소형 모델이 ViT-g의 성능을 물려받는 distillation(Fig. 5)이다."
+    },
+    {
+      "id": "7131f7a2-a0dc-41eb-8a1c-1a8a54264169",
+      "question": "DINOv2가 SSL 연구사에서 갖는 위치를 논문은 어떻게 규정하나?",
+      "answer": "파인튜닝 없이 광범위한 벤치마크에서 (약)지도 대안과의 성능 격차를 좁힌 최초의 이미지 SSL 연구라고 주장한다. 객체 부위와 장면 기하 이해 같은 창발적 성질도 도메인과 무관하게 나타난다."
+    },
+    {
+      "id": "41e54a8b-24cd-47df-87ed-c00656b0023d",
+      "question": "DINOv2 저자들이 밝힌 향후 연구 방향은?",
+      "answer": "모델·데이터 스케일을 계속 키워 LLM의 instruction emergence처럼 더 많은 창발적 성질을 얻는 것이다. 또한 시각 특징을 word token처럼 처리하는 언어 기반 AI 시스템을 학습해 grounding에 활용할 계획이다."
+    },
+    {
+      "id": "c2577326-7192-43c9-82d8-b4a0bebca413",
+      "question": "이미지 유사도 함수 $m(s,r)$의 정의는?",
+      "answer": "$m(s,r) = \\text{cosine-similarity}(f(s), f(r)) = \\frac{f(s)\\cdot f(r)}{\\|f(s)\\|_2 \\|f(r)\\|_2}$로 정의된다. $s$와 $r$은 비교할 이미지 쌍, $f$는 특징을 생성하는 모델이다."
+    },
+    {
+      "id": "03fc5414-4a3a-461c-8581-2abf6eeda290",
+      "question": "Self-deduplication의 구체적 절차와 임계값은?",
+      "answer": "Pizzi et al.(2022) 임베딩으로 각 이미지의 $k=64$ 최근접 이웃을 코사인 유사도로 검색하고, 유사도 $>0.6$인 이웃만 고려해 k-NN 그래프의 connected component를 추출한다. 각 component당 대표 1장만 남겨 13억 → 11억 장이 된다."
+    },
+    {
+      "id": "4e1c019f-6d43-4675-8d83-76c9b644db73",
+      "question": "Relative deduplication은 무엇이며 임계값은 얼마인가?",
+      "answer": "평가 데이터셋의 train/test split과 너무 유사한 이미지를 제거하는 단계로, 더 엄격한 유사도 $>0.45$를 쓴다. 각 reference 이미지가 속한 duplicate component를 통째로 버려 최종 7억 4400만 장이 남는다."
+    },
+    {
+      "id": "f0a990e3-d126-4be2-b430-46d7034ba74d",
+      "question": "sample-based retrieval의 적용 대상과 $k$ 값은?",
+      "answer": "100만 장이 넘는 데이터셋에 적용하며 각 샘플마다 $k$개의 최근접 이미지를 수집한다. Google Landmarks v2와 ImageNet-22k에는 $k=4$를, 특정 retrieval을 LVD-142M의 핵심으로 만들기 위해서는 더 큰 $k=32$를 쓴다."
+    },
+    {
+      "id": "b767f878-e13c-445b-95bc-e271edff6ef8",
+      "question": "cluster-based retrieval의 절차는?",
+      "answer": "분산 k-means로 uncurated 소스를 10만 개 클러스터로 나누고, 검색 대상 데이터셋의 이미지가 3장 넘게 속한 클러스터마다 10,000장을 뽑는다. 데이터셋 간 균형을 위해 한 데이터셋당 최대 100만 장으로 제한한다."
+    },
+    {
+      "id": "837cfad6-703b-460e-ba16-bb44ebbb5381",
+      "question": "LVD-142M에서 가장 큰 비중을 차지하는 구성 요소는?",
+      "answer": "ImageNet-22k의 sample-based retrieval 결과 56,788,344장이 가장 크고, 그다음이 ImageNet-1k train의 40,997,344장이다. ImageNet-22k 원본 14,197,086장도 as-is로 포함된다."
+    },
+    {
+      "id": "926e8712-f8bb-40dd-852d-0b9d257dd0e8",
+      "question": "DINOv2 사전학습의 코드베이스 기반과 학습 iteration 수는?",
+      "answer": "DINO와 iBOT 코드베이스 위에 구축했으며, 모든 모델을 625k iteration 학습한다. optimizer는 AdamW다."
+    },
+    {
+      "id": "37ab055b-65fb-49ff-ae5e-4513192b51fd",
+      "question": "DINOv2의 주요 학습 하이퍼파라미터(스케줄 포함)는?",
+      "answer": "초기 LayerScale 값 1e-5, weight decay는 0.04→0.2 코사인 스케줄, learning rate warmup 100k iteration, teacher momentum은 0.994→1 코사인 스케줄이다. DINO head의 gradient를 float32로 reduce하는 것을 제외하면 float16으로 학습한다."
+    },
+    {
+      "id": "46d9d261-f10a-4e6f-9829-46c2414d1ecf",
+      "question": "distilled 모델과 scratch 학습 모델의 하이퍼파라미터 차이는?",
+      "answer": "distilled 모델(S/B/L)은 drop-rate 0, LR 1e-3, batch size 2048을 쓴다. scratch 학습 모델(ViT-L, ViT-g)은 drop-rate 0.4, LR 3.5e-4, batch size 3072를 쓴다."
+    },
+    {
+      "id": "604b4aef-9ccf-4c15-90ac-4026f9fed4a5",
+      "question": "ViT-S/B/L/g의 아키텍처 사양은?",
+      "answer": "ViT-S/14는 384dim/6heads/12blocks, ViT-B/14는 768/12/18, ViT-L/14는 1024/16/24, ViT-g/14는 1536/24/40이다. distilled 모델은 MLP FFN을, scratch 학습 모델은 SwiGLU FFN을 쓴다."
+    },
+    {
+      "id": "fe381024-3710-4857-8e09-c3e47d9e8766",
+      "question": "고해상도 적응(B.2) 단계의 세부 설정은?",
+      "answer": "사전학습 가중치로 초기화한 뒤 동일한 절차로 10k iteration 학습하며, 모든 스케줄을 10k에 맞게 압축한다. base learning rate를 낮추는 것 외에 하이퍼파라미터는 그대로 둔다."
+    },
+    {
+      "id": "717470b4-9e93-4b85-9b47-58f4cdf3c442",
+      "question": "linear probing 평가에서 그리드 서치하는 3개 파라미터는?",
+      "answer": "learning rate(0.0001~0.5 중 13개 값), 사용할 output layer 수({1, 4}), average-pooled patch token을 class token과 concat할지 여부({yes, no})다. SGD로 12500 iteration, random-resized-crop 증강을 쓴다."
+    },
+    {
+      "id": "58babf68-9c93-4da2-be1c-a441ab7118be",
+      "question": "linear probing 그리드 서치가 비싸지 않은 이유는?",
+      "answer": "매 iteration마다 백본 추론을 한 번만 수행하고 그 출력을 모든 linear classifier에 먹이기 때문이다. 각 classifier는 행렬 곱 한 번만 수행한다."
+    },
+    {
+      "id": "e5b6a6c1-ab8c-46c4-9462-8d8d8cfa7439",
+      "question": "linear probing 결과 보고 방식은?",
+      "answer": "관행에 따라 validation set에서 얻은 가장 높은 정확도 값을 보고한다. 그리드 서치의 최고값을 취하는 방식이다."
+    },
+    {
+      "id": "542dcab2-6f54-4321-930b-4743c735f959",
+      "question": "DINOv2 평가에 쓰였지만 사전학습에는 as-is로 포함되지 않은 대표적 데이터셋은?",
+      "answer": "ImageNet-1k(as-is 사전학습 ✗), ImageNet-V2/ReaL/A/C/R/Sketch, iNaturalist 2018·2021, Places-205, UCF101, Kinetics-400, SSv2 등이다. 반면 ImageNet-22k, Google Landmarks v2, Mapillary SLS는 as-is로 사전학습에 포함되었다."
+    }
+  ]
+}

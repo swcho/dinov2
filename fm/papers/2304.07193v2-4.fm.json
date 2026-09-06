@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "049da8e4-40f8-4fcf-ab1b-95d1750ed0d4",
+      "question": "uncurated 데이터 ablation은 어떻게 통제되었나?",
+      "answer": "LVD-142M과 같은 데이터 소스에서 1억 4200만 장을 무작위 샘플링해 동일 iteration 수로 ViT-g/14를 학습했다. 고해상도 적응 단계는 제외했다."
+    },
+    {
+      "id": "ce9a555e-05fe-417b-921d-355cadae37a5",
+      "question": "모델 크기와 데이터 크기의 상호작용(Fig. 4)에 대한 결론은?",
+      "answer": "모델이 커질수록 ImageNet-22k(14M)보다 LVD-142M(142M) 학습의 이점이 커진다. LVD-142M의 ViT-g는 ImageNet-1k 성능은 동등하게 유지하면서 다른 벤치마크에서 크게 앞선다."
+    },
+    {
+      "id": "34a4454f-3e51-418c-9183-6ab9447cfe55",
+      "question": "KoLeo loss ablation(Table 3a)의 정량적 효과는?",
+      "answer": "Oxford-M 검색 성능이 55.6 → 63.9로 8% 이상 향상된다. ImageNet-1k, ImageNet-A, ADE-20k 등 다른 지표는 손해를 보지 않는다."
+    },
+    {
+      "id": "05db6d3f-2f69-4cf5-beb3-81c6c5e30e42",
+      "question": "MIM(masked image modeling) loss ablation(Table 3b)의 결과는?",
+      "answer": "ADE-20k 분할이 44.2 → 47.1로 약 3% 향상되어, dense prediction 태스크에 결정적임을 보인다. ImageNet-1k도 85.3 → 85.8로 소폭 오른다."
+    },
+    {
+      "id": "3180844d-3159-42ca-a68d-a51dee20ccdb",
+      "question": "knowledge distillation 효과 검증(Fig. 5) 실험 설계는?",
+      "answer": "scratch로 학습한 ViT-L/14와 ViT-g/14에서 증류한 ViT-L/14를 12개 벤치마크에서 비교하고, teacher인 ViT-g/14를 topline으로 함께 보고한다. 증류 모델이 12개 전부에서 우수했고 때로는 teacher까지 능가했다."
+    },
+    {
+      "id": "7f9efc9c-1ffd-4d11-acb6-f2283b729ba6",
+      "question": "해상도 ablation(Fig. 6)에서 비교한 세 가지 설정은?",
+      "answer": "고정 224 학습, 고정 416 학습, 그리고 224로 학습 후 416으로 10k iteration 추가 학습(\"224→416\")이다. ImageNet-1k로 ViT-L/16을 학습한 소규모 셋업으로 진행했다."
+    },
+    {
+      "id": "b06d367f-cfde-4ad8-866b-3ff747fac6bc",
+      "question": "해상도 ablation의 결론과 비용 비교는?",
+      "answer": "416 고정 학습이 가장 좋지만 224 대비 약 3배의 연산을 요구한다. 마지막에 10k iteration만 고해상도로 학습해도 거의 동등한 성능을 훨씬 적은 비용으로 얻는다."
+    },
+    {
+      "id": "a338561c-e8e0-42a7-a7de-9fdee49b3658",
+      "question": "DINOv2 평가에 사용한 두 종류의 baseline은?",
+      "answer": "공개된 최고 성능 자기지도 모델(MAE, DINO, SEERv2, MSN, EsViT, Mugs, iBOT)과 오픈소스 weakly-supervised 모델(CLIP, OpenCLIP, SWAG)이다. ImageNet-1k 외 평가에서는 SSL 상위 4개와 참조용 OpenCLIP-G만 보고한다."
+    },
+    {
+      "id": "a9513680-ad72-4c08-8d6e-94a2866f0114",
+      "question": "ImageNet-1k 선형 평가에서 DINOv2가 기존 SSL SOTA 대비 얼마나 개선했나?",
+      "answer": "이전 SOTA인 iBOT ViT-L/16(ImageNet-22k 학습) 대비 +4.2% 향상했다. 대체 테스트셋(ReaL, V2)에서의 개선폭이 더 커 일반화가 더 강함을 시사한다."
+    },
+    {
+      "id": "c2c5a172-b372-4ce1-ae6f-2146a1197f85",
+      "question": "ImageNet-1k에서 DINOv2 ViT-g/14의 linear·kNN 성능은?",
+      "answer": "kNN 83.5, linear val 86.5, ReaL 89.6, V2 78.4를 기록했다. ViT-L/14도 kNN 83.5 / linear 86.3으로 매우 근접하다."
+    },
+    {
+      "id": "afd638d5-7ea6-4b60-b539-66c835f94779",
+      "question": "DINOv2는 weakly-supervised 모델과 비교해 어땠나?",
+      "answer": "OpenCLIP ViT-G/14를 +0.3%, EVA-CLIP ViT-g/14를 +0.1% 능가했다. 특히 ImageNet-V2에서는 EVA-CLIP 대비 +1.1%로 일반화가 더 좋았다."
+    },
+    {
+      "id": "feb0a1a2-eb8e-41c2-8a84-e77f7b3cf021",
+      "question": "DINOv2를 ImageNet-1k에 파인튜닝하면 어떻게 되나?",
+      "answer": "Touvron et al.(2022) 파이프라인으로 하이퍼파라미터 조정 없이 파인튜닝하면 해상도 224에서 86.5→88.5(+2.0), 448에서 86.7→88.9(+2.2)로 오른다. 절대 SOTA(91.1%)와는 2.2% 차이다."
+    },
+    {
+      "id": "c848e641-fdc9-4713-a34f-97f353388285",
+      "question": "파인튜닝 실험에서 논문이 강조한 결론은?",
+      "answer": "DINOv2 특징은 linear와 finetuning 양쪽에서 강하므로 \"파인튜닝은 선택 사항(optional)\"이라는 점이다. frozen feature에 과도하게 특화된 것이 아님을 확인하는 sanity check이기도 하다."
+    },
+    {
+      "id": "531f3abf-df3b-4efb-b5e8-ec1158a6f573",
+      "question": "Robustness(domain generalization) 평가에서 DINOv2의 iBOT 대비 개선폭은?",
+      "answer": "ImageNet-A에서 +29.6%, ImageNet-R에서 +22.1%, Sketch에서 +23.0% 개선했다. 다만 R과 Sketch에서는 최고 weakly-supervised 모델에 뒤진다."
+    },
+    {
+      "id": "77c32408-a5ad-4efc-a3a9-21cd96968c0c",
+      "question": "Robustness 평가에서 DINOv2 ViT-g/14가 OpenCLIP-G를 이긴 벤치마크는?",
+      "answer": "ImageNet-A에서 75.9 vs 63.8로 앞선다. ImageNet-R(78.8 vs 87.8)과 Sketch(62.5 vs 66.4)에서는 뒤진다."
+    },
+    {
+      "id": "9b585744-4ede-46d4-acc1-7a58f88ff7a6",
+      "question": "ImageNet-C 지표를 읽을 때 주의할 점은?",
+      "answer": "ImageNet-C는 낮을수록 좋은(↓) 지표다. DINOv2 ViT-g/14의 28.2가 OpenCLIP-G의 45.3보다 우수하다."
+    },
+    {
+      "id": "4b36e8ee-55ff-4663-8c99-2ce34a363bb8",
+      "question": "iNaturalist 벤치마크에서 DINOv2의 성능은?",
+      "answer": "OpenCLIP ViT-G/14 대비 iNat2018에서 +8.6%, iNat2021에서 +9.7% 앞선다. 반면 Places205에서는 -2.3%로 약간 뒤진다."
+    },
+    {
+      "id": "a88ac9bf-9424-48de-8dff-2b9adcaacfab",
+      "question": "비디오 행동 인식 평가에서 사용한 특징 추출 방식은?",
+      "answer": "비디오에서 균등 간격 8프레임을 뽑아, UCF-101과 Kinetics-400은 특징 평균 위에 linear classifier를 학습한다. SSv2는 시간 정보를 더 유지하기 위해 평균 대신 concatenation을 쓴다."
+    },
+    {
+      "id": "cf276114-0427-46c4-88f8-608bbfd09e25",
+      "question": "비디오를 학습에 쓰지 않았는데도 DINOv2가 얻은 결과는?",
+      "answer": "SSL 방법 중 새로운 SOTA를 세웠고, UCF(+0.1%)와 Kinetics(+0.5%)에서 OpenCLIP과 대등하며 SSv2에서는 +2.5%로 확실히 앞선다. SSv2가 더 풍부한 프레임 이해를 요구한다는 점에서 의미가 크다."
+    }
+  ]
+}

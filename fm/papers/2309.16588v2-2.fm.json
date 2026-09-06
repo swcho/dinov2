@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "7aa40957-2b81-46a2-82f3-49852734d58f",
+      "question": "pixel reconstruction probing 결과가 시사하는 바는?",
+      "answer": "high-norm token은 다른 토큰보다 픽셀 복원 정확도가 훨씬 낮다. 즉 이미지를 재구성할 국소 정보를 덜 담고 있다."
+    },
+    {
+      "id": "bdb0bf5b-2396-4413-92b7-c5301cf59eff",
+      "question": "outlier token이 global 정보를 담고 있음을 어떻게 보였는가?",
+      "answer": "DINOv2-g로 patch embedding을 뽑은 뒤 high-norm 또는 normal 토큰 하나를 무작위로 골라 이미지 표현으로 삼고, 로지스틱 회귀 분류기를 학습해 정확도를 측정했다. outlier 토큰 쪽 정확도가 훨씬 높았다."
+    },
+    {
+      "id": "71edbec6-18bc-474f-864c-9ca3b76299ea",
+      "question": "Table 1에서 Aircraft(Airc.) 데이터셋의 normal vs outlier vs [CLS] linear probing 정확도는?",
+      "answer": "normal 17.1, outlier 79.1, [CLS] 87.3이다. outlier 토큰이 normal 대비 압도적으로 높아 global 정보를 저장하고 있음을 보여준다."
+    },
+    {
+      "id": "2c7845be-6993-49d3-af96-cc7f84a6c017",
+      "question": "Table 1에서 CUB 데이터셋의 normal과 outlier 정확도 차이는?",
+      "answer": "normal 18.6, outlier 84.9로 60포인트 이상 차이가 난다. Cars도 10.8 대 85.2로 비슷하게 극적인 차이를 보인다."
+    },
+    {
+      "id": "29309c16-e7b6-4cc7-b6e2-8b5789be2365",
+      "question": "저자들이 제시한 artifact에 대한 핵심 가설은?",
+      "answer": "크고 충분히 학습된 모델은 중복(redundant) 토큰을 인식하는 법을 배우고, 그것을 global 정보를 저장·처리·검색하는 장소로 사용한다는 것이다."
+    },
+    {
+      "id": "1351fa93-8175-4850-92d1-05199c731da7",
+      "question": "이 동작 자체는 나쁘지 않은데도 문제가 되는 이유는?",
+      "answer": "그 일이 patch token 내부에서 벌어지기 때문이다. 결과적으로 모델이 국소 patch 정보를 버리게 되고, dense prediction 과제의 성능 저하로 이어질 수 있다."
+    },
+    {
+      "id": "cf305e9b-53ff-4247-a4af-a267a0f51fcc",
+      "question": "register 토큰은 구조적으로 어디에 어떻게 추가되는가?",
+      "answer": "patch embedding layer 뒤에 [CLS] 토큰과 유사하게 학습 가능한 값으로 추가된다. Vision Transformer 끝에서는 폐기되고, [CLS]와 patch token만 이미지 표현으로 사용된다."
+    },
+    {
+      "id": "f8e1ee5f-32a0-4ca1-9614-3d082f67fa72",
+      "question": "register 토큰 출력값은 어디에 사용되는가?",
+      "answer": "어디에도 사용되지 않는다. 학습·추론 모두에서 출력에서는 patch token과 [CLS] token만 쓰이고 register는 버려진다."
+    },
+    {
+      "id": "b1e4be50-30ba-4c4a-828b-3c6dbbadaa35",
+      "question": "register 메커니즘이 처음 제안된 선행 연구는?",
+      "answer": "Memory Transformers(Burtsev et al., 2020)로, NLP의 번역 과제 성능을 개선하기 위해 제안되었다. 이 논문은 그 메커니즘이 vision transformer에서 자연스러운 정당성을 갖는다는 점을 보인다."
+    },
+    {
+      "id": "0437477e-3dc1-4191-8a00-e8644c3a6c51",
+      "question": "artifact를 유발하는 학습 요인에 대해 저자들이 인정한 한계는?",
+      "answer": "어떤 학습 요소가 artifact를 만드는지 완전히 규명하지 못했다. 사전학습 패러다임도 영향을 주는 듯하고(OpenCLIP, DeiT-III는 B와 L 크기 모두에서 outlier 발생), 모델 크기와 학습 길이도 중요한 역할을 한다."
+    },
+    {
+      "id": "80e04370-d892-44f7-aca5-97a157092a9b",
+      "question": "실험에 사용된 세 가지 학습 방법과 각각의 감독 유형은?",
+      "answer": "DeiT-III(label supervision), OpenCLIP(text supervision), DINOv2(self-supervision)이다. 제안 방법이 단순한 구조 변경이라 어떤 학습 절차에도 쉽게 적용할 수 있음을 보이기 위함이다."
+    },
+    {
+      "id": "cef3949e-d1e8-4130-a749-ac214ce3e9c4",
+      "question": "DeiT-III 실험 설정은?",
+      "answer": "ImageNet-22k 데이터셋에 공식 저장소의 ViT-B 설정으로 학습했다. 단순하고 재현·수정이 쉬우며 강한 분류 성능을 내는 label-supervised 학습의 예로 선택되었다."
+    },
+    {
+      "id": "164e899f-48fd-45eb-8298-9b93e97f8d5d",
+      "question": "OpenCLIP 실험 설정은?",
+      "answer": "라이선스된 이미지·텍스트만 포함한 Shutterstock 기반 text-image 정렬 코퍼스에서 ViT-B/16 이미지 인코더로 학습했다. 오픈소스이고 기본 ViT 구조를 쓰기 때문에 text-supervised 예시로 선택되었다."
+    },
+    {
+      "id": "297834e2-81e5-4d56-b2f3-179646dba3e7",
+      "question": "DINOv2 실험 설정은?",
+      "answer": "ImageNet-22k에서 ViT-L 구성으로 공식 저장소를 사용해 학습했다. 이 연구의 주된 분석 대상이기 때문에 선택되었다."
+    },
+    {
+      "id": "238aafe4-d8b0-49bf-a269-ed8f80232ebd",
+      "question": "register 사용 시 출력 norm 분포는 어떻게 변하는가?",
+      "answer": "세 알고리즘(DINOv2, OpenCLIP, DeiT-III) 모두에서 large-norm 토큰이 출력에 나타나지 않는다. 이는 정성적 관찰(artifact 소멸)을 정량적으로 확인해 준다."
+    },
+    {
+      "id": "e2c875b5-8a44-4c09-827b-05d92fd83687",
+      "question": "performance regression을 검증하기 위해 사용한 세 가지 평가는?",
+      "answer": "ImageNet 분류 linear probing, ADE20k segmentation, NYUd 단안 depth estimation이다. Oquab et al.(2023)의 실험 프로토콜을 따랐다."
+    },
+    {
+      "id": "e50db73d-6235-4891-9d8f-ef76b09b0b24",
+      "question": "Table 2a에서 DINOv2와 DINOv2+reg의 성능 비교는?",
+      "answer": "ImageNet Top-1은 84.3 → 84.8, ADE20k mIoU는 46.6 → 47.9, NYUd rmse는 0.378 → 0.366(낮을수록 좋음)이다. 즉 register가 성능을 떨어뜨리지 않고 오히려 개선한다."
+    },
+    {
+      "id": "c1c0290f-714c-487f-94f6-9db802de9c54",
+      "question": "Table 2a에서 DeiT-III와 DeiT-III+reg의 결과는?",
+      "answer": "ImageNet Top-1은 84.7로 동일, ADE20k mIoU는 38.9 → 39.1, NYUd rmse는 0.511 → 0.512다. 성능 변화가 사실상 없다."
+    }
+  ]
+}

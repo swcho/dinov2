@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "06e27944-ff1e-4562-ab28-6cd132e43640",
+      "question": "12개 fine-grained 전이 분류 벤치마크는 어디서 유래했으며 무엇을 바꿨나?",
+      "answer": "Chen et al.(2020, SimCLR)이 제안한 벤치마크로 장면·객체(음식, 자동차, 비행기)·텍스처를 다룬다. Birdsnap이 전체 공개되지 않아 CUB로 대체했다."
+    },
+    {
+      "id": "aba4e34c-e692-4f7b-aee6-29239b975704",
+      "question": "12개 전이 분류 벤치마크의 평가 프로토콜은?",
+      "answer": "미리 계산한 특징 위에 logistic regression을 학습하는 Chen et al.(2020) 방식을 따른다. DINOv2 ViT-g/14는 평균 92.1로 OpenCLIP-G의 91.9를 앞선다."
+    },
+    {
+      "id": "c031ccb3-6eb9-4105-87db-94f6e0d716c8",
+      "question": "fine-grained 벤치마크에서 DINOv2가 SSL 대비 가장 크게 앞선 항목은?",
+      "answer": "Stanford Cars에서 DINO ViT-B/8 대비 +14.8%, FGVC Aircraft에서 iBOT ViT-L/16 대비 +14.8% 앞선다. 반면 OpenCLIP에는 SUN(-5.3%)과 Cars(-4.7%)에서 뒤진다."
+    },
+    {
+      "id": "bbff54aa-85c7-491c-a021-e2afb88f1a05",
+      "question": "Instance recognition 평가는 어떤 방식으로 수행하나?",
+      "answer": "파라미터 없는(non-parametric) 방식으로, 쿼리 이미지와의 코사인 유사도로 데이터베이스 이미지를 랭킹한다. mean average precision(mAP)으로 성능을 측정한다."
+    },
+    {
+      "id": "ce0f0d67-d31b-4943-a93c-8c4c208482e4",
+      "question": "Instance recognition에 쓰인 4개 벤치마크는?",
+      "answer": "Oxford와 Paris(랜드마크 인식), Met(메트로폴리탄 미술관 예술품), AmsterTime(암스테르담 거리뷰와 기록 사진 매칭)이다."
+    },
+    {
+      "id": "03e879c2-de4e-42da-81b5-186e38241d24",
+      "question": "Oxford-Hard에서 DINOv2의 성능 격차는?",
+      "answer": "SSL 대비 +41% mAP, weakly-supervised 대비 +34% mAP 앞선다. category 수준과 instance 수준 모두에서 잘 작동한다는 점이 강력한 off-the-shelf 특징의 바람직한 성질이다."
+    },
+    {
+      "id": "78fec465-63fb-472b-ad05-c352d780ada1",
+      "question": "semantic segmentation 평가의 \"Linear\" 설정은 무엇인가?",
+      "answer": "패치 토큰에서 class logit을 예측하는 선형 층 하나를 학습해 저해상도 logit map(예: patch 16이면 32x32)을 만든 뒤 512x512로 업샘플링한다. 매우 단순하지만 고해상도 분할을 만들기 어렵다."
+    },
+    {
+      "id": "be10f758-2cbe-4e8d-9902-b8190c47a578",
+      "question": "semantic segmentation의 \"+ms\" 설정은 linear 대비 무엇이 다른가?",
+      "answer": "마지막 4개 층의 패치 토큰을 concat하고, 이미지 해상도를 640으로 키우며, multiscale test-time augmentation을 적용한다. linear 설정을 강화(boost)한 버전이다."
+    },
+    {
+      "id": "be28b55f-ab9b-41c3-a118-378ad92da9c7",
+      "question": "+ms 설정의 ADE20k 성능이 놀라운 이유는?",
+      "answer": "53.0 mIoU로, Upernet 디코더로 MAE를 완전 파인튜닝한 53.6과 거의 동등하다. 훨씬 단순한 predictor를 쓰면서 얻은 결과라 의미가 크다."
+    },
+    {
+      "id": "2aced1b8-f786-4061-83c4-23115e149c93",
+      "question": "frozen 백본을 SOTA 파이프라인에 넣은 실험의 결과는?",
+      "answer": "백본을 얼린 채 ViT-Adapter + Mask2Former head만 학습해 ADE20k에서 60.2 mIoU를 얻었다(SOTA 62.9). 전체 가중치의 66%가 frozen이라 학습이 가볍고, V100 16장으로 28시간이 걸렸다."
+    },
+    {
+      "id": "dd1ea7fb-fd03-4654-8f67-c75448f77be8",
+      "question": "Pascal VOC 분할에서 DINOv2의 위치는?",
+      "answer": "+ms 설정의 ViT-g/14가 86.2 mIoU로 절대 SOTA인 89.0에 거의 근접한다. linear만으로도 83.0을 기록한다."
+    },
+    {
+      "id": "406b90d6-7fbb-4f65-bff7-16e296f23ae3",
+      "question": "depth estimation 평가에 사용한 3개 벤치마크는?",
+      "answer": "NYUd, KITTI, 그리고 NYUd에서 SUN RGB-D로의 zero-shot 전이다. Li et al.(2022b)의 평가 프로토콜을 따르며 RMSE로 보고한다(낮을수록 좋음)."
+    },
+    {
+      "id": "eee2fd27-2d58-439a-9a12-a92814c572d5",
+      "question": "depth estimation의 \"lin. 1\" 설정은 어떻게 구성되나?",
+      "answer": "frozen transformer의 마지막 층을 뽑아 [CLS] token을 각 patch token에 concat하고 4배 bilinear 업샘플링한다. 깊이 범위를 256개 균등 bin으로 나눈 classification loss로 선형 층 하나를 학습한다."
+    },
+    {
+      "id": "028a3eae-c43e-48b1-9997-fa17fc4a0529",
+      "question": "depth estimation의 \"lin. 4\" 설정에서 사용하는 층 인덱스는?",
+      "answer": "ViT-S/B는 $l=\\{3,6,9,12\\}$, ViT-L은 $l=\\{5,12,18,24\\}$, ViT-g는 $l=\\{10,20,30,40\\}$의 토큰을 concat한다. 나머지 프로토콜은 lin. 1과 같다."
+    },
+    {
+      "id": "155bfd1c-4809-4797-a35f-805201e5b55c",
+      "question": "depth estimation의 \"DPT\" 설정이란?",
+      "answer": "Ranftl et al.(2021)의 DPT 디코더를 frozen 모델 위에 올려 회귀(regression) 태스크로 학습한다. 아키텍처별 특징 차원에 맞춰 head 크기를 조정한다."
+    },
+    {
+      "id": "7ee2cdbd-2db6-489f-a77a-71dc8cb9f628",
+      "question": "depth estimation 결과에서 iBOT ViT-L이 OpenCLIP ViT-G를 이긴 것의 의미는?",
+      "answer": "caption 기반 특징 학습이 깊이처럼 미묘한 패턴을 학습하지 못한다는 직관을 뒷받침한다. DINOv2 ViT-g/14는 NYUd DPT 0.279로 최상위다."
+    },
+    {
+      "id": "00b1827f-88a5-4b1e-8fb7-e698e36e27a4",
+      "question": "SUN RGB-D zero-shot 전이 결과가 시사하는 바는?",
+      "answer": "NYUd 실내 장면으로 학습한 깊이 예측 모듈이 SUN RGB-D의 실외 예제에도 잘 일반화한다. 즉 DINOv2 특징이 도메인 간 전이를 잘 지원한다."
+    },
+    {
+      "id": "d36aafdd-45a3-4cd5-8571-4bd27e14976b",
+      "question": "정성적 분할·깊이 결과에서 OpenCLIP과 DINOv2의 차이는?",
+      "answer": "OpenCLIP-G의 분할 마스크는 artifact와 끊긴 컴포넌트가 많은 반면 DINOv2는 훨씬 안정적이다. 깊이 추정도 DINOv2가 더 매끄럽고 artifact가 적으며, SUN RGB-D의 의자처럼 OpenCLIP이 완전히 무시한 물체도 올바르게 잡는다."
+    },
+    {
+      "id": "51f42bd1-a59e-4881-ba29-9699b2090415",
+      "question": "깊이 정보로 학습하지 않았는데 linear probe가 깊이를 예측할 수 있다는 사실의 의미는?",
+      "answer": "DINOv2(및 OpenCLIP) 특징이 깊이 같은 복잡한 정보를 선형적으로 분리 가능하게 담고 있다는 뜻이다. 즉 필요한 정보가 \"readily available\" 상태로 인코딩되어 있다."
+    }
+  ]
+}
